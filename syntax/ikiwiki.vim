@@ -26,7 +26,7 @@ set cpo&vim
 
 " Load the base syntax (default to markdown) if nothing was loaded.
 if !exists("b:current_syntax")
-	let s:ikiwiki_render_filetype = "mkd"
+	let s:ikiwiki_render_filetype = "markdown"
 	if exists("g:ikiwiki_render_filetype")
 		let s:ikiwiki_render_filetype = g:ikiwiki_render_filetype
 	endif
