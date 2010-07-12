@@ -1,5 +1,5 @@
 " Vim syntax file
-" Language:     Ikiwiki (links)
+" Language:     Ikiwiki (links and directives)
 " Maintainer:   Recai Oktaş (roktasATdebian.org)
 " Last Change:  2007 May 29
 
@@ -56,23 +56,25 @@ syn region ikiBla matchgroup=ikiLinkDelim start=+\([^\\]\|^\)\zs\[\[\ze[^!]+ end
 	 \ contains=ikiLinkVName,ikiLinkText,ikiLinkNameSep
 
 syn match ikiLinkNameSep !|! contained nextgroup=ikiLinkText
-syn match ikiLinkText !\(\w\| \|/\)\+! contained
+syn match ikiLinkText !\(\w\|-\| \|/\)\+! contained
 syn match ikiLinkVName !\_[^\]|]\+\ze|! contained nextgroup=ikiLinkNameSep
 " }}}1
 
 " {{{1 ikiwiki directives
 
-syn cluster ikiDirContents contains=ikiDirName,ikiDirParamName,ikiDirAssign,ikiDirParamValSimple
-syn region ikiDirDelim start=+\[\[\!+ end=+\]\]+ contains=@ikiDirContents
+syn cluster ikiDirContents contains=ikiDirName
+syn cluster ikiDirVal contains=ikiDirParamValSimple,ikiDirParamValQuoted,ikiDirParamVal3Q
+"syn cluster ikiDirContents contains=ikiDirName,ikiDirParamName,ikiDirAssign,ikiDirParamValSimple
+syn region ikiDirDelim start=+\[\[\!+ end=+\]\]+ contains=@ikiDirContents fold
 
 syn match ikiDirName !\w\+! contained nextgroup=ikiDirParamName skipwhite
-syn match ikiDirParamName !\(\w\|/\)\+! contained nextgroup=ikiDirAssign,ikiDirParamName skipwhite
-syn match ikiDirAssign !=! contained nextgroup=@ikiDirParamVal skipwhite
+syn match ikiDirParamName !\(\w\|[/:]\)\+! contained nextgroup=ikiDirAssign,ikiDirParamName skipwhite
+syn match ikiDirAssign !=! contained nextgroup=@ikiDirVal skipwhite
 syn match ikiDirParamValSimple ![^" \]]\+! contained nextgroup=ikiDirParamName skipwhite skipnl
-syn region ikiDirParamValQuoted start=![^" \]]\+! end=!! contained nextgroup=ikiDirParamName skipwhite skipnl
+syn region ikiDirParamValQuoted start=!"! skip=!\\"! end=!"! contained nextgroup=ikiDirParamName skipwhite skipnl
+syn region ikiDirParamVal3Q start=!"""! end=!"""! contained nextgroup=ikiDirParamName skipwhite
 
 " }}}1 ikiwiki directives
-
 
 " {{{1 association to standard syntax groups
 "{{{2 wikilinks
@@ -88,39 +90,13 @@ hi def link ikiDirName Type
 hi def link ikiDirParamName Identifier
 hi def link ikiDirAssign Operator
 hi def link ikiDirParamValSimple Constant
+hi def link ikiDirParamValQuoted Constant
+hi def link ikiDirParamVal3Q Constant
 " }}}1
 
-"syn match ikiwikiDelim "\(\[\[\|\]\]\)"
-"syn region ikiwikiLinkContent matchgroup=ikiwikiLink start=+\[\[\(\w\+\s\+\)\{,1}+ end=+\]\]+ contains=ikiwikiLinkNested,ikiwikiParam,ikiwikiNoParam
-"syn region ikiwikiLinkNested matchgroup=ikiwikiLinkNested start=+"""+ end=+"""+ contains=ikiwikiLinkContent contained
-
-" FIXME: Below is an ugly hack to prevent highlighting of simple links
-"        as directives.  Links with spaces are still problematic though.
-"syn region ikiwikiNoParam start=+\[\[[^|=]\+|+ end=+[^|=]\+\]\]+ keepend contains=ikiwikiMagic,ikiwikiDelim
-
-"syn match  ikiwikiMagic "|" contained 
-"syn match  ikiwikiParam "\<\i\+\ze=" nextgroup=ikiwikiParamAssign contained
-"syn match  ikiwikiParamAssign "=" nextgroup=ikiwikiValue contained
-"syn region ikiwikiValue start=+"+hs=e-1 end=+"+ skip=+\\"+ keepend contains=ikiwikiValueMagic contained 
-" TODO FIX OFFSET
-"syn region ikiwikiValue start=+"""+hs=e-1 end=+"""+ keepend contains=ikiwikiValueMagic contained 
-"syn match  ikiwikiValueMagic +\(!\<\|\*\|\<\(and\|or\)\>\|\<\i*(\|\>)\)+ contained 
-
 syn sync minlines=50
-
-"hi def link ikiwikiLink Statement
-"hi def link ikiwikiLinkNested String
-"hi def link ikiwikiLinkContent Underlined
-
-"hi def link ikiwikiMagic Operator
-"hi def link ikiwikiDelim Operator
-"hi def link ikiwikiNoParam Underlined
-"hi def link ikiwikiParam Identifier
-"hi def link ikiwikiParamAssign Operator
-"hi def link ikiwikiValue String
-"hi def link ikiwikiValueMagic Type
 
 let b:current_syntax = "ikiwiki"
 unlet s:cpo_save
 
-" vim:ts=8:sts=8:noet
+" vim:ts=8:sts=8:noet:fdm=marker
