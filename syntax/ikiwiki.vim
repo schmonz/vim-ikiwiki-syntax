@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:     Ikiwiki (links and directives)
-" Maintainer:   Recai Oktaş (roktasATdebian.org)
-" Last Change:  2007 May 29
+" Maintainer:   Javier Rojas <jerojasro@devnull.li>
+" Last Change:  July 18, 2010
 
 " Instructions:
 "               - make sure to use the relevant syntax file which can be found
@@ -9,29 +9,23 @@
 "                 respectively:
 "                 	http://www.vim.org/scripts/script.php?script_id=1242
 "			http://www.vim.org/scripts/script.php?script_id=973
-"               - put the file into your syntax directory (e.g. ~/.vim/syntax)
-"               - if you use markdown (with .mdwn extension) add sth like below
-"                 in your VIM startup file:
-"                 	au BufNewFile,BufRead *.mdwn set ft=ikiwiki
 "               - if you use a different markup other than markdown (e.g. reST)
 "                 make sure to setup 'g:ikiwiki_render_filetype' properly in
 "                 your startup file (skip this step for mkd.vim, it should work
 "                 out of the box)
-" Todo:
-"               - revamp the whole file so as to detect valid ikiwiki directives
-"                 and parameters (needs a serious work)
+" Former Maintainer: Recai Oktaş (roktasATdebian.org)
 
 let s:cpo_save = &cpo
 set cpo&vim
 
-" Load the base syntax (default to markdown) if nothing was loaded.
+"{{{1 Load the base syntax (default to markdown) if nothing was loaded.
 if !exists("b:current_syntax")
 	let s:ikiwiki_render_filetype = "mkd"
 	if exists("g:ikiwiki_render_filetype")
 		let s:ikiwiki_render_filetype = g:ikiwiki_render_filetype
 	endif
 	exe 'runtime! syntax/' . s:ikiwiki_render_filetype . '.vim'
-endif
+endif " }}}1
 
 unlet b:current_syntax
 
@@ -52,8 +46,9 @@ syn case match
 "  and not-links
 "    \[[not a link]]
 " {{{2
-syn region ikiBla matchgroup=ikiLinkDelim start=+\([^\\]\|^\)\zs\[\[\ze[^!]+ end=+\]\]+ 
+syn region ikiBla matchgroup=ikiLinkDelim start=+\[\[\ze[^!]+ end=+\]\]+ 
 	 \ contains=ikiLinkVName,ikiLinkText,ikiLinkNameSep
+syn region ikiNoLink start=+\\\[\[+ end=+\]\]+ 
 
 syn match ikiLinkNameSep !|! contained nextgroup=ikiLinkText
 syn match ikiLinkText !\(\w\|-\| \|/\)\+! contained
@@ -64,7 +59,6 @@ syn match ikiLinkVName !\_[^\]|]\+\ze|! contained nextgroup=ikiLinkNameSep
 
 syn cluster ikiDirContents contains=ikiDirName
 syn cluster ikiDirVal contains=ikiDirParamValSimple,ikiDirParamValQuoted,ikiDirParamVal3Q
-"syn cluster ikiDirContents contains=ikiDirName,ikiDirParamName,ikiDirAssign,ikiDirParamValSimple
 syn region ikiDirDelim start=+\[\[\!+ end=+\]\]+ contains=@ikiDirContents fold
 
 syn match ikiDirName !\w\+! contained nextgroup=ikiDirParamName skipwhite
