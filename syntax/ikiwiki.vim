@@ -62,7 +62,7 @@ syn cluster ikiDirVal contains=ikiDirParamValSimple,ikiDirParamValQuoted,ikiDirP
 syn region ikiDirDelim start=+\[\[\!+ end=+\]\]+ contains=@ikiDirContents fold
 
 syn match ikiDirName !\w\+! contained nextgroup=ikiDirParamName skipwhite
-syn match ikiDirParamName !\(\w\|[/:]\)\+! contained nextgroup=ikiDirAssign,ikiDirParamName skipwhite
+syn match ikiDirParamName !\(\w\|[/:.-]\)\+! contained nextgroup=ikiDirAssign,ikiDirParamName skipwhite
 syn match ikiDirAssign !=! contained nextgroup=@ikiDirVal skipwhite
 syn match ikiDirParamValSimple ![^" \]]\+! contained nextgroup=ikiDirParamName skipwhite skipnl
 syn region ikiDirParamValQuoted start=!"! skip=!\\"! end=!"! contained nextgroup=ikiDirParamName skipwhite skipnl
