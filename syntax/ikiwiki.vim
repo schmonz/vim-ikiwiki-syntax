@@ -51,7 +51,7 @@ syn region ikiBla matchgroup=ikiLinkDelim start=+\[\[\ze[^!]+ end=+\]\]+
 syn region ikiNoLink start=+\\\[\[+ end=+\]\]+ 
 
 syn match ikiLinkNameSep !|! contained nextgroup=ikiLinkText
-syn match ikiLinkText !\(\w\|-\| \|/\)\+! contained
+syn match ikiLinkText !\(\w\|-\| \|/\|#\)\+! contained
 syn match ikiLinkVName !\_[^\]|]\+\ze|! contained nextgroup=ikiLinkNameSep
 " }}}1
 
