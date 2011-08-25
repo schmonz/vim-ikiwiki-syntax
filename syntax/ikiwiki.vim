@@ -27,7 +27,9 @@ if !exists("b:current_syntax")
 	exe 'runtime! syntax/' . s:ikiwiki_render_filetype . '.vim'
 endif " }}}1
 
-unlet b:current_syntax
+if exists("b:current_syntax")
+	unlet b:current_syntax
+endif
 
 syn case match
 
